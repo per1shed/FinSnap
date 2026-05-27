@@ -97,6 +97,19 @@ TIMEZONE_PROMPT = (
     "Пример: <code>14</code>"
 )
 
+
+def timezone_change_prompt(current_offset_label: str | None = None) -> str:
+    current_line = ""
+    if current_offset_label:
+        current_line = f"Сейчас: <b>{current_offset_label}</b>\n\n"
+    return (
+        f"🕐 <b>Смена часового пояса</b>\n\n"
+        f"{current_line}"
+        "Сколько сейчас <b>часов</b> у вас? (только час, без минут)\n\n"
+        "Введите число от <code>0</code> до <code>23</code>\n"
+        "Пример: <code>14</code>"
+    )
+
 WELCOME_TEXT = (
     "👋 <b>Добро пожаловать в FinSnap!</b>\n\n"
     "Кратко о возможностях бота:\n\n"

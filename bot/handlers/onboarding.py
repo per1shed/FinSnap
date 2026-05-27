@@ -5,7 +5,7 @@ from aiogram.types import Message
 from bot.config import Settings
 from bot.db import queries
 from bot.db.pool import get_pool
-from bot.handlers.welcome import show_welcome
+from bot.handlers.welcome import TIMEZONE_RECONFIGURE_KEY, show_welcome
 from bot.handlers.fsm_reprompt import reprompt_current_step
 from bot.handlers.screen import replace_screen_from_message
 from bot.services.user_timezone import (
@@ -35,6 +35,7 @@ async def process_user_time(
     await queries.set_user_utc_offset(pool, message.from_user.id, offset)
 
     await state.set_state(None)
+    await state.update_data(**{TIMEZONE_RECONFIGURE_KEY: False})
     await message.delete()
 
     timezone_text = describe_timezone_human(offset)

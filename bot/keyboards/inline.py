@@ -15,6 +15,8 @@ ADMIN_USERS_FIND = "admin:users:find"
 ADMIN_BACK_PREFIX = "admin:back:"
 CB_BACK_MENU = "nav:menu"
 CB_WELCOME_DONE = "nav:welcome_done"
+CB_CHANGE_TZ = "nav:change_tz"
+CB_BACK_WELCOME = "nav:welcome_back"
 CB_GOAL_NEW = "goal:new"
 CB_GOAL_LIST = "goal:list"
 CB_STATS_TYPE_EXPENSE = "stats_type:expense"
@@ -29,18 +31,40 @@ CB_STATS_INCOME_WEEK = "stats:income:week"
 CB_STATS_INCOME_MONTH = "stats:income:month"
 
 
-def welcome_keyboard() -> InlineKeyboardMarkup:
+def timezone_change_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [
                 InlineKeyboardButton(
-                    text="✅ Понятно, в меню",
-                    callback_data=CB_WELCOME_DONE,
-                    style="success",
+                    text="↩️ Назад",
+                    callback_data=CB_BACK_WELCOME,
                 )
             ]
         ]
     )
+
+
+def welcome_keyboard(*, show_change_tz: bool = True) -> InlineKeyboardMarkup:
+    rows: list[list[InlineKeyboardButton]] = []
+    if show_change_tz:
+        rows.append(
+            [
+                InlineKeyboardButton(
+                    text="🕐 Сменить",
+                    callback_data=CB_CHANGE_TZ,
+                )
+            ]
+        )
+    rows.append(
+        [
+            InlineKeyboardButton(
+                text="✅ Понятно, в меню",
+                callback_data=CB_WELCOME_DONE,
+                style="success",
+            )
+        ]
+    )
+    return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
 def main_menu_keyboard(*, show_admin: bool = False) -> InlineKeyboardMarkup:

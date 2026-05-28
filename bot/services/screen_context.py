@@ -11,6 +11,7 @@ from bot.keyboards.inline import (
     admin_panel_keyboard,
     admin_user_search_keyboard,
     back_to_menu_keyboard,
+    cancel_keyboard,
     category_keyboard,
     goals_list_keyboard,
     main_menu_keyboard,
@@ -41,6 +42,7 @@ KB_ADMIN_PANEL = "admin_panel"
 KB_GOALS_LIST = "goals_list"
 KB_BACK_MENU = "back_menu"
 KB_TIMEZONE_CHANGE = "timezone_change"
+KB_TEXT_CANCEL = "text_cancel"
 
 _TEXT_ENTRY_STATES = frozenset(
     {
@@ -111,6 +113,8 @@ async def keyboard_for_kind(
         return back_to_menu_keyboard()
     if kind == KB_TIMEZONE_CHANGE:
         return timezone_change_keyboard()
+    if kind == KB_TEXT_CANCEL:
+        return cancel_keyboard()
     return None
 
 

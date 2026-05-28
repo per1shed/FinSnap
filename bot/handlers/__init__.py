@@ -3,6 +3,7 @@ from aiogram import Router
 from bot.handlers import (
     admin,
     admin_users,
+    cancel,
     fsm_reprompt,
     goals,
     onboarding,
@@ -18,6 +19,7 @@ def setup_routers() -> Router:
     root.include_router(onboarding.router)
     root.include_router(welcome.router)
     root.include_router(start.router)
+    root.include_router(cancel.router)
     root.include_router(admin.router)
     root.include_router(admin_users.router)
     root.include_router(transaction.router)

@@ -82,15 +82,14 @@ def format_goals_list(goals: list[FinancialGoal]) -> str:
 
 
 def format_goals_menu_hint(goals: list[FinancialGoal]) -> str:
+    """Блок целей для главного меню — все активные цели списком."""
     if not goals:
         return ""
-    top = goals[0]
-    pct = progress_percent(top.saved_amount, top.target_amount)
-    if len(goals) == 1:
-        return (
-            f"\n<b>Цель:</b> {top.title} — {pct:.0f}% "
-            f"({format_money(top.saved_amount)} / {format_money(top.target_amount)})"
+    lines = ["\n\n<b>🎯 Цели</b>"]
+    for goal in goals:
+        pct = progress_percent(goal.saved_amount, goal.target_amount)
+        lines.append(
+            f"• <b>{goal.title}</b> — {format_money(goal.saved_amount)} / "
+            f"{format_money(goal.target_amount)} ({pct:.0f}%)"
         )
-    return (
-        f"\n<b>Цели:</b> {len(goals)} активных · ближайшая «{top.title}» — {pct:.0f}%"
-    )
+    return "\n".join(lines)

@@ -12,12 +12,12 @@ from bot.services.screen_context import KB_MAIN_MENU, MENU_SHOW_ADMIN_KEY
 from bot.handlers.fsm_reprompt import (
     KB_CATEGORY_EXPENSE,
     KB_CATEGORY_INCOME,
-    KB_NONE,
+    KB_TEXT_CANCEL,
     reprompt_current_step,
     show_fsm_step_callback,
 )
 from bot.handlers.screen import replace_screen_from_message
-from bot.keyboards.inline import CB_EXPENSE, CB_INCOME, category_keyboard
+from bot.keyboards.inline import CB_EXPENSE, CB_INCOME, cancel_keyboard, category_keyboard
 from bot.services.parser import parse_amount_and_comment
 from bot.states.transaction import TransactionStates
 from bot.texts.messages import INVALID_AMOUNT_TEXT, category_prompt
@@ -98,7 +98,8 @@ async def _start_input(
         callback,
         state,
         prompt,
-        keyboard_kind=KB_NONE,
+        reply_markup=cancel_keyboard(),
+        keyboard_kind=KB_TEXT_CANCEL,
     )
 
 

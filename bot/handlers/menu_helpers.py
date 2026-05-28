@@ -23,7 +23,9 @@ async def build_main_menu_payload(user_id: int, settings: Settings) -> tuple[str
     now = datetime.now(user_tz)
     income, expense = await queries.get_month_summary(pool, user_id, now, user_tz)
     total_balance = await queries.get_total_balance(pool, user_id)
-    active_goals = await goals_queries.list_active_goals(pool, user_id, limit=5)
+    active_goals = await goals_queries.list_active_goals(
+        pool, user_id, limit=goals_queries.MAX_ACTIVE_GOALS
+    )
     goals_hint = format_goals_menu_hint(active_goals)
     local = now.astimezone(user_tz)
     text = main_menu_text(

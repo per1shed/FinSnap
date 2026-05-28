@@ -15,12 +15,17 @@ from bot.handlers.screen import (
     resend_screen_after_notice,
     store_wrong_input_notice,
 )
-from bot.keyboards.inline import admin_user_search_keyboard, category_keyboard
+from bot.keyboards.inline import (
+    admin_user_search_keyboard,
+    cancel_keyboard,
+    category_keyboard,
+)
 from bot.services.screen_context import (
     KB_ADMIN_SEARCH,
     KB_CATEGORY_EXPENSE,
     KB_CATEGORY_INCOME,
     KB_NONE,
+    KB_TEXT_CANCEL,
     SCREEN_IS_PHOTO,
     is_text_entry_state,
     restored_step,
@@ -50,6 +55,7 @@ __all__ = [
     "KB_ADMIN_SEARCH",
     "KB_CATEGORY_EXPENSE",
     "KB_CATEGORY_INCOME",
+    "KB_TEXT_CANCEL",
     "reprompt_current_step",
     "show_fsm_step_callback",
     "show_fsm_step_message",
@@ -90,17 +96,17 @@ def _fallback_step(
     if state_name == TransactionStates.waiting_input.state:
         tx_type = TransactionType(data["tx_type"])
         label = "Расход" if tx_type == TransactionType.EXPENSE else "Доход"
-        return category_prompt(label, data["category_label"]), None
+        return category_prompt(label, data["category_label"]), cancel_keyboard()
 
     if state_name == GoalStates.waiting_title.state:
-        return GOAL_TITLE_PROMPT, None
+        return GOAL_TITLE_PROMPT, cancel_keyboard()
 
     if state_name == GoalStates.waiting_target.state:
-        return GOAL_TARGET_PROMPT.format(title=data.get("goal_title", "—")), None
+        return GOAL_TARGET_PROMPT.format(title=data.get("goal_title", "—")), cancel_keyboard()
 
     if state_name == GoalStates.waiting_deposit.state:
         title = data.get("goal_title") or "цель"
-        return GOAL_DEPOSIT_PROMPT.format(title=title), None
+        return GOAL_DEPOSIT_PROMPT.format(title=title), cancel_keyboard()
 
     if state_name == AdminStates.waiting_user_search.state:
         return (

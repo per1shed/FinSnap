@@ -7,11 +7,12 @@ from bot.db import goals_queries
 from bot.db.goals_queries import FinancialGoal
 from bot.db.pool import get_pool
 from bot.handlers.fsm_reprompt import (
-    KB_NONE,
+    KB_TEXT_CANCEL,
     reprompt_current_step,
     show_fsm_step_callback,
     show_fsm_step_message,
 )
+from bot.keyboards.inline import cancel_keyboard
 from bot.handlers.chart_flow import (
     finish_chart_callback,
     hide_chart_building,
@@ -216,7 +217,11 @@ async def start_new_goal(callback: CallbackQuery, state: FSMContext) -> None:
 
     await state.set_state(GoalStates.waiting_title)
     await show_fsm_step_callback(
-        callback, state, GOAL_TITLE_PROMPT, keyboard_kind=KB_NONE
+        callback,
+        state,
+        GOAL_TITLE_PROMPT,
+        reply_markup=cancel_keyboard(),
+        keyboard_kind=KB_TEXT_CANCEL,
     )
 
 
@@ -237,7 +242,8 @@ async def process_goal_title(
         message,
         state,
         GOAL_TARGET_PROMPT.format(title=title),
-        keyboard_kind=KB_NONE,
+        reply_markup=cancel_keyboard(),
+        keyboard_kind=KB_TEXT_CANCEL,
         delete_user_message=True,
     )
 
@@ -301,7 +307,8 @@ async def start_deposit(callback: CallbackQuery, state: FSMContext) -> None:
         callback,
         state,
         GOAL_DEPOSIT_PROMPT.format(title=goal.title),
-        keyboard_kind=KB_NONE,
+        reply_markup=cancel_keyboard(),
+        keyboard_kind=KB_TEXT_CANCEL,
     )
 
 

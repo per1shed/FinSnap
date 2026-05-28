@@ -14,6 +14,7 @@ ADMIN_USERS_PAGE_PREFIX = "admin:users:p:"
 ADMIN_USERS_FIND = "admin:users:find"
 ADMIN_BACK_PREFIX = "admin:back:"
 CB_BACK_MENU = "nav:menu"
+CB_CANCEL = "nav:cancel"
 CB_WELCOME_DONE = "nav:welcome_done"
 CB_CHANGE_TZ = "nav:change_tz"
 CB_BACK_WELCOME = "nav:welcome_back"
@@ -29,6 +30,19 @@ CB_STATS_EXPENSE_WEEK = "stats:expense:week"
 CB_STATS_EXPENSE_MONTH = "stats:expense:month"
 CB_STATS_INCOME_WEEK = "stats:income:week"
 CB_STATS_INCOME_MONTH = "stats:income:month"
+
+
+def cancel_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="❌ Отмена",
+                    callback_data=CB_CANCEL,
+                )
+            ]
+        ]
+    )
 
 
 def timezone_change_keyboard() -> InlineKeyboardMarkup:

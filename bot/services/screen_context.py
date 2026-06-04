@@ -18,6 +18,10 @@ from bot.keyboards.inline import (
     stats_kind_keyboard,
     stats_period_keyboard,
     stats_type_keyboard,
+    admin_broadcast_compose_keyboard,
+    admin_broadcast_preview_keyboard,
+    import_prompt_keyboard,
+    import_review_keyboard,
     timezone_change_keyboard,
     welcome_keyboard,
 )
@@ -43,6 +47,10 @@ KB_GOALS_LIST = "goals_list"
 KB_BACK_MENU = "back_menu"
 KB_TIMEZONE_CHANGE = "timezone_change"
 KB_TEXT_CANCEL = "text_cancel"
+KB_IMPORT_PROMPT = "import_prompt"
+KB_IMPORT_REVIEW = "import_review"
+KB_ADMIN_BROADCAST = "admin_broadcast"
+KB_ADMIN_BROADCAST_PREVIEW = "admin_broadcast_preview"
 
 _TEXT_ENTRY_STATES = frozenset(
     {
@@ -52,6 +60,7 @@ _TEXT_ENTRY_STATES = frozenset(
         "GoalStates:waiting_target",
         "GoalStates:waiting_deposit",
         "AdminStates:waiting_user_search",
+        "AdminStates:waiting_broadcast_text",
     }
 )
 
@@ -115,6 +124,15 @@ async def keyboard_for_kind(
         return timezone_change_keyboard()
     if kind == KB_TEXT_CANCEL:
         return cancel_keyboard()
+    if kind == KB_IMPORT_PROMPT:
+        return import_prompt_keyboard()
+    if kind == KB_IMPORT_REVIEW:
+        count = int(data.get("import_review_count", 0))
+        return import_review_keyboard(max(count, 1))
+    if kind == KB_ADMIN_BROADCAST:
+        return admin_broadcast_compose_keyboard()
+    if kind == KB_ADMIN_BROADCAST_PREVIEW:
+        return admin_broadcast_preview_keyboard()
     return None
 
 

@@ -499,6 +499,11 @@ async def count_users(pool: asyncpg.Pool) -> int:
     return await pool.fetchval("SELECT COUNT(*)::int FROM users")
 
 
+async def list_all_user_ids(pool: asyncpg.Pool) -> list[int]:
+    rows = await pool.fetch("SELECT user_id FROM users ORDER BY user_id")
+    return [int(row["user_id"]) for row in rows]
+
+
 async def list_users_page(
     pool: asyncpg.Pool, page: int, *, page_size: int = USERS_PAGE_SIZE
 ) -> list[AdminUserRow]:

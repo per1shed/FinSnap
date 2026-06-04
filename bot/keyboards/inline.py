@@ -7,11 +7,20 @@ CB_EXPENSE = "op:expense"
 CB_INCOME = "op:income"
 CB_STATS = "op:stats"
 CB_GOALS = "op:goals"
+CB_IMPORT = "op:import"
+BTN_IMPORT = "📷 Загрузить скриншот"
 CB_ADMIN = "op:admin"
+IMPORT_CONFIRM_PREFIX = "import:save:"
+IMPORT_CANCEL = "import:cancel"
 ADMIN_PERIOD_PREFIX = "admin:p:"
 ADMIN_REFRESH_PREFIX = "admin:refresh:"
 ADMIN_USERS_PAGE_PREFIX = "admin:users:p:"
 ADMIN_USERS_FIND = "admin:users:find"
+ADMIN_BROADCAST = "admin:broadcast"
+ADMIN_BROADCAST_SEND = "admin:broadcast:send"
+ADMIN_BROADCAST_CANCEL = "admin:broadcast:cancel"
+CB_BROADCAST_ACK = "broadcast:ack"
+CB_BROADCAST_RESULT_ACK = "broadcast:result:ack"
 ADMIN_BACK_PREFIX = "admin:back:"
 CB_BACK_MENU = "nav:menu"
 CB_CANCEL = "nav:cancel"
@@ -32,6 +41,42 @@ CB_STATS_INCOME_WEEK = "stats:income:week"
 CB_STATS_INCOME_MONTH = "stats:income:month"
 
 
+def import_prompt_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="❌ Отмена",
+                    callback_data=IMPORT_CANCEL,
+                    style="danger",
+                )
+            ],
+            [InlineKeyboardButton(text="⬅️ В меню", callback_data=CB_BACK_MENU)],
+        ]
+    )
+
+
+def import_review_keyboard(count: int) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text=f"✅ Записать ({count})",
+                    callback_data=f"{IMPORT_CONFIRM_PREFIX}{count}",
+                    style="success",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="❌ Отмена",
+                    callback_data=IMPORT_CANCEL,
+                    style="danger",
+                )
+            ],
+        ]
+    )
+
+
 def cancel_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
@@ -39,6 +84,7 @@ def cancel_keyboard() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(
                     text="❌ Отмена",
                     callback_data=CB_CANCEL,
+                    style="danger",
                 )
             ]
         ]
@@ -107,6 +153,13 @@ def main_menu_keyboard(*, show_admin: bool = False) -> InlineKeyboardMarkup:
                 style="primary",
             ),
         ],
+        [
+            InlineKeyboardButton(
+                text=BTN_IMPORT,
+                callback_data=CB_IMPORT,
+                style="primary",
+            ),
+        ],
     ]
     if show_admin:
         rows.append(
@@ -167,7 +220,76 @@ def admin_panel_keyboard(active_period: str = "30d") -> InlineKeyboardMarkup:
                     callback_data=f"{ADMIN_USERS_PAGE_PREFIX}0",
                 ),
             ],
+            [
+                InlineKeyboardButton(
+                    text="📢 Рассылка",
+                    callback_data=ADMIN_BROADCAST,
+                ),
+            ],
             [InlineKeyboardButton(text="⬅️ В меню", callback_data=CB_BACK_MENU)],
+        ]
+    )
+
+
+def admin_broadcast_compose_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="❌ Отмена",
+                    callback_data=ADMIN_BROADCAST_CANCEL,
+                    style="danger",
+                )
+            ],
+        ]
+    )
+
+
+def admin_broadcast_preview_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="✅ Отправить всем",
+                    callback_data=ADMIN_BROADCAST_SEND,
+                    style="success",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="❌ Отмена",
+                    callback_data=ADMIN_BROADCAST_CANCEL,
+                    style="danger",
+                )
+            ],
+        ]
+    )
+
+
+def broadcast_ack_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Понятно",
+                    callback_data=CB_BROADCAST_ACK,
+                    style="success",
+                )
+            ],
+        ]
+    )
+
+
+def broadcast_result_ack_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Отлично",
+                    callback_data=CB_BROADCAST_RESULT_ACK,
+                    style="success",
+                )
+            ],
         ]
     )
 
@@ -305,6 +427,7 @@ def goal_delete_confirm_keyboard(goal_id: int) -> InlineKeyboardMarkup:
                 InlineKeyboardButton(
                     text="❌ Отмена",
                     callback_data=f"goal:open:{goal_id}",
+                    style="danger",
                 ),
             ],
             [InlineKeyboardButton(text="⬅️ К целям", callback_data=CB_GOAL_LIST)],

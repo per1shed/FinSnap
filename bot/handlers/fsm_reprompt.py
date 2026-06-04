@@ -16,11 +16,13 @@ from bot.handlers.screen import (
     store_wrong_input_notice,
 )
 from bot.keyboards.inline import (
+    admin_broadcast_compose_keyboard,
     admin_user_search_keyboard,
     cancel_keyboard,
     category_keyboard,
 )
 from bot.services.screen_context import (
+    KB_ADMIN_BROADCAST,
     KB_ADMIN_SEARCH,
     KB_CATEGORY_EXPENSE,
     KB_CATEGORY_INCOME,
@@ -34,7 +36,7 @@ from bot.states.admin import AdminStates
 from bot.states.goal import GoalStates
 from bot.states.onboarding import OnboardingStates
 from bot.states.transaction import TransactionStates
-from bot.texts.admin import ADMIN_USERS_SEARCH_PROMPT
+from bot.texts.admin import ADMIN_BROADCAST_PROMPT, ADMIN_USERS_SEARCH_PROMPT
 from bot.texts.goals import (
     GOAL_DEPOSIT_PROMPT,
     GOAL_TARGET_PROMPT,
@@ -70,6 +72,7 @@ _TEXT_ENTRY_STATES = (
     GoalStates.waiting_target,
     GoalStates.waiting_deposit,
     AdminStates.waiting_user_search,
+    AdminStates.waiting_broadcast_text,
 )
 
 
@@ -113,6 +116,9 @@ def _fallback_step(
             ADMIN_USERS_SEARCH_PROMPT,
             admin_user_search_keyboard(list_page=data.get("admin_list_page", 0)),
         )
+
+    if state_name == AdminStates.waiting_broadcast_text.state:
+        return ADMIN_BROADCAST_PROMPT, admin_broadcast_compose_keyboard()
 
     return "Повторите ввод.", None
 
